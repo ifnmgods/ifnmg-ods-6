@@ -1,0 +1,1599 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz - ODS6 Água Potável e Saneamento</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Reset e Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #ffffff;
+            background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            position: relative;
+        }
+
+        /* Container Principal */
+        .main-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            position: relative;
+        }
+
+        /* Header Fixo */
+        .quiz-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 10, 10, 0.98);
+            backdrop-filter: blur(15px);
+            border-bottom: 2px solid rgba(0, 188, 212, 0.3);
+            padding: 1rem 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .quiz-header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .header-title {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .header-title h1 {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ffffff, #00bcd4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-title p {
+            font-size: clamp(0.9rem, 2.5vw, 1.2rem);
+            color: #e0e0e0;
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: linear-gradient(45deg, #00bcd4, #0097a7);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            min-height: 44px;
+        }
+
+        .nav-btn.admin {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 188, 212, 0.3);
+        }
+
+        .quiz-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem;
+            background: rgba(0, 188, 212, 0.15);
+            border-radius: 10px;
+            border: 1px solid rgba(0, 188, 212, 0.3);
+        }
+
+        .stat-item i {
+            font-size: 1.5rem;
+            color: #00bcd4;
+        }
+
+        .stat-item span {
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        /* Conteúdo Principal */
+        .content-wrapper {
+            margin-top: 120px;
+            padding-bottom: 2rem;
+            width: 100%;
+        }
+
+        .quiz-container {
+            background: rgba(0, 188, 212, 0.1);
+            border: 2px solid rgba(0, 188, 212, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        /* Progress Bar */
+        .quiz-progress {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: rgba(0, 188, 212, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(0, 188, 212, 0.2);
+        }
+
+        .progress-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .progress-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            overflow: hidden;
+            min-width: 150px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00bcd4, #0097a7);
+            border-radius: 6px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        .quiz-counter {
+            color: #00bcd4;
+            font-weight: 700;
+            font-size: 1.1rem;
+            white-space: nowrap;
+        }
+
+        .score-display {
+            display: none; /* Ocultar pontuação durante o quiz */
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0, 188, 212, 0.2);
+            padding: 0.8rem 1.2rem;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+
+        .score-display i {
+            color: #00bcd4;
+        }
+
+        .score-display span {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        /* Question */
+        .quiz-question {
+            background: rgba(0, 188, 212, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            border-left: 5px solid #00bcd4;
+            width: 100%;
+        }
+
+        .question-number {
+            color: #00bcd4;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+        }
+
+        .question-text {
+            color: #ffffff;
+            font-size: clamp(1.1rem, 3vw, 1.4rem);
+            font-weight: 600;
+            line-height: 1.5;
+            word-wrap: break-word;
+            hyphens: auto;
+        }
+
+        /* Options */
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            width: 100%;
+        }
+
+        .quiz-option {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(0, 188, 212, 0.3);
+            border-radius: 15px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            min-height: 60px;
+        }
+
+        .quiz-option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .quiz-option:hover::before {
+            left: 100%;
+        }
+
+        .quiz-option:hover {
+            border-color: #00bcd4;
+            background: rgba(0, 188, 212, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 188, 212, 0.2);
+        }
+
+        .quiz-option.selected {
+            border-color: #00bcd4;
+            background: rgba(0, 188, 212, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .quiz-option.correct {
+            border-color: #4caf50;
+            background: rgba(76, 175, 80, 0.2);
+            animation: correctPulse 0.6s ease;
+        }
+
+        .quiz-option.incorrect {
+            border-color: #f44336;
+            background: rgba(244, 67, 54, 0.2);
+            animation: incorrectShake 0.6s ease;
+        }
+
+        .quiz-option.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        @keyframes correctPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes incorrectShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .option-letter {
+            width: 45px;
+            height: 45px;
+            background: #00bcd4;
+            color: #000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-option.correct .option-letter {
+            background: #4caf50;
+            color: #fff;
+        }
+
+        .quiz-option.incorrect .option-letter {
+            background: #f44336;
+            color: #fff;
+        }
+
+        .option-text {
+            flex: 1;
+            color: #ffffff;
+            font-size: clamp(1rem, 2.5vw, 1.1rem);
+            font-weight: 500;
+            word-wrap: break-word;
+            hyphens: auto;
+            line-height: 1.4;
+        }
+
+        .option-feedback {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .quiz-option.correct .option-feedback {
+            opacity: 1;
+            color: #4caf50;
+        }
+
+        .quiz-option.incorrect .option-feedback {
+            opacity: 1;
+            color: #f44336;
+        }
+
+        /* Explanation */
+        .quiz-explanation {
+            background: rgba(0, 188, 212, 0.1);
+            border: 2px solid rgba(0, 188, 212, 0.3);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+            width: 100%;
+        }
+
+        .quiz-explanation.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .explanation-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .explanation-header i {
+            color: #00bcd4;
+            font-size: 1.2rem;
+        }
+
+        .explanation-header span {
+            color: #00bcd4;
+            font-weight: 600;
+        }
+
+        .explanation-text {
+            color: #e0e0e0;
+            line-height: 1.6;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+            word-wrap: break-word;
+            hyphens: auto;
+        }
+
+        /* Controls */
+        .quiz-controls {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+            width: 100%;
+        }
+
+        .quiz-btn {
+            background: linear-gradient(45deg, #00bcd4, #0097a7);
+            color: #ffffff;
+            border: none;
+            padding: 1rem 2.5rem;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-height: 50px;
+            white-space: nowrap;
+        }
+
+        .quiz-btn:hover:not(:disabled) {
+            background: linear-gradient(45deg, #0097a7, #00838f);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0, 188, 212, 0.4);
+        }
+
+        .quiz-btn:disabled {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Intro Screen */
+        .quiz-intro {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: rgba(0, 188, 212, 0.1);
+            border: 2px solid rgba(0, 188, 212, 0.3);
+            border-radius: 20px;
+            width: 100%;
+        }
+
+        .quiz-intro h2 {
+            color: #00bcd4;
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            margin-bottom: 1rem;
+        }
+
+        .quiz-intro p {
+            color: #e0e0e0;
+            font-size: clamp(1rem, 2.5vw, 1.1rem);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .quiz-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .quiz-feature {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1.5rem 1rem;
+            background: rgba(0, 188, 212, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(0, 188, 212, 0.3);
+        }
+
+        .quiz-feature i {
+            font-size: 2rem;
+            color: #00bcd4;
+        }
+
+        .quiz-feature span {
+            color: #ffffff;
+            font-weight: 600;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .start-quiz-btn {
+            background: linear-gradient(45deg, #00bcd4, #0097a7);
+            color: #ffffff;
+            border: none;
+            padding: 1.5rem 3rem;
+            border-radius: 35px;
+            font-size: clamp(1.1rem, 3vw, 1.4rem);
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 188, 212, 0.4);
+            border: 2px solid transparent;
+            min-height: 60px;
+        }
+
+        .start-quiz-btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.6s ease;
+        }
+
+        .start-quiz-btn:hover::before {
+            left: 100%;
+        }
+
+        .start-quiz-btn:hover {
+            background: linear-gradient(45deg, #0097a7, #00838f);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 25px 50px rgba(0, 188, 212, 0.6);
+            border-color: #00bcd4;
+        }
+
+        .start-quiz-btn:active {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0, 188, 212, 0.4);
+        }
+
+        .start-quiz-btn i {
+            font-size: 1.4rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Result */
+        .quiz-result {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: rgba(0, 188, 212, 0.1);
+            border-radius: 20px;
+            border: 2px solid #00bcd4;
+            margin-top: 2rem;
+            width: 100%;
+        }
+
+        .result-header {
+            margin-bottom: 2rem;
+        }
+
+        .result-header i {
+            font-size: 4rem;
+            color: #00bcd4;
+            margin-bottom: 1rem;
+        }
+
+        .result-header h3 {
+            color: #00bcd4;
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            margin-bottom: 1rem;
+        }
+
+        .result-score {
+            margin-bottom: 2rem;
+        }
+
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border: 8px solid #00bcd4;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            background: rgba(0, 188, 212, 0.1);
+        }
+
+        .score-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .score-percentage {
+            font-size: 1.2rem;
+            color: #00bcd4;
+            font-weight: 600;
+        }
+
+        .result-message {
+            font-size: clamp(1.1rem, 3vw, 1.3rem);
+            color: #e0e0e0;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .result-details {
+            text-align: left;
+            margin-bottom: 2rem;
+            width: 100%;
+        }
+
+        .result-details h4 {
+            color: #00bcd4;
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .answer-review {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid #00bcd4;
+            width: 100%;
+        }
+
+        .answer-review.correct {
+            border-left-color: #4caf50;
+            background: rgba(76, 175, 80, 0.1);
+        }
+
+        .answer-review.incorrect {
+            border-left-color: #f44336;
+            background: rgba(244, 67, 54, 0.1);
+        }
+
+        .question-review {
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 1rem;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+            word-wrap: break-word;
+            hyphens: auto;
+        }
+
+        .answer-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .user-answer, .correct-answer, .explanation {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+        }
+
+        .user-answer i {
+            color: #4caf50;
+            margin-top: 0.2rem;
+            flex-shrink: 0;
+        }
+
+        .answer-review.incorrect .user-answer i {
+            color: #f44336;
+        }
+
+        .correct-answer i {
+            color: #4caf50;
+            margin-top: 0.2rem;
+            flex-shrink: 0;
+        }
+
+        .explanation i {
+            color: #00bcd4;
+            margin-top: 0.2rem;
+            flex-shrink: 0;
+        }
+
+        .user-answer span, .correct-answer span, .explanation span {
+            color: #e0e0e0;
+            line-height: 1.5;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+            word-wrap: break-word;
+            hyphens: auto;
+        }
+
+        .result-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
+        .quiz-btn-secondary {
+            background: linear-gradient(45deg, #666, #555);
+        }
+
+        .quiz-btn-secondary:hover:not(:disabled) {
+            background: linear-gradient(45deg, #555, #444);
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #00bcd4;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsividade Tablet */
+        @media (max-width: 1024px) {
+            .content-wrapper {
+                margin-top: 140px;
+            }
+
+            .quiz-header-content {
+                padding: 0 1.5rem;
+            }
+
+            .header-top {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+            }
+
+            .header-nav {
+                justify-content: center;
+            }
+
+            .quiz-container {
+                padding: 1.5rem;
+            }
+
+            .quiz-question {
+                padding: 1.5rem;
+            }
+
+            .quiz-option {
+                padding: 1.2rem;
+            }
+        }
+
+        /* Responsividade Mobile */
+        @media (max-width: 768px) {
+            .content-wrapper {
+                margin-top: 160px;
+            }
+
+            .quiz-header {
+                padding: 0.8rem 0;
+            }
+
+            .quiz-header-content {
+                padding: 0 1rem;
+            }
+
+            .header-top {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .header-title {
+                min-width: auto;
+            }
+
+            .header-nav {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .nav-btn {
+                width: 100%;
+                justify-content: center;
+                padding: 1rem;
+                font-size: 1rem;
+            }
+
+            .quiz-container {
+                padding: 1rem;
+            }
+
+            .quiz-progress {
+                padding: 1rem;
+            }
+
+            .progress-top {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+            }
+
+            .progress-info {
+                flex-direction: column;
+                gap: 0.8rem;
+                min-width: auto;
+            }
+
+            .progress-bar {
+                min-width: auto;
+                width: 100%;
+            }
+
+            .score-display {
+                align-self: center;
+                width: fit-content;
+            }
+
+            .quiz-question {
+                padding: 1.2rem;
+            }
+
+            .quiz-option {
+                padding: 1rem;
+                min-height: 70px;
+            }
+
+            .option-letter {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+
+            .quiz-explanation {
+                padding: 1.2rem;
+            }
+
+            .quiz-btn {
+                padding: 1rem 2rem;
+                font-size: 1rem;
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .quiz-intro {
+                padding: 2rem 1rem;
+            }
+
+            .quiz-features {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.8rem;
+            }
+
+            .quiz-feature {
+                padding: 1rem;
+            }
+
+            .quiz-feature i {
+                font-size: 1.5rem;
+            }
+
+            .start-quiz-btn {
+                padding: 1.2rem 2rem;
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .score-circle {
+                width: 120px;
+                height: 120px;
+            }
+
+            .score-number {
+                font-size: 1.5rem;
+            }
+
+            .answer-review {
+                padding: 1rem;
+            }
+
+            .result-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .result-actions .quiz-btn {
+                width: 100%;
+                max-width: 250px;
+            }
+        }
+
+        /* Responsividade Mobile Pequeno */
+        @media (max-width: 480px) {
+            .content-wrapper {
+                margin-top: 180px;
+            }
+
+            .quiz-header-content {
+                padding: 0 0.5rem;
+            }
+
+            .quiz-container {
+                padding: 0.8rem;
+            }
+
+            .quiz-progress {
+                padding: 0.8rem;
+            }
+
+            .quiz-question {
+                padding: 1rem;
+            }
+
+            .quiz-option {
+                padding: 0.8rem;
+                min-height: 60px;
+            }
+
+            .option-letter {
+                width: 35px;
+                height: 35px;
+                font-size: 0.9rem;
+            }
+
+            .quiz-explanation {
+                padding: 1rem;
+            }
+
+            .quiz-btn {
+                padding: 0.8rem 1.5rem;
+                font-size: 0.9rem;
+            }
+
+            .quiz-intro {
+                padding: 1.5rem 0.8rem;
+            }
+
+            .quiz-features {
+                grid-template-columns: 1fr;
+                gap: 0.8rem;
+            }
+
+            .quiz-feature {
+                flex-direction: row;
+                justify-content: center;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .start-quiz-btn {
+                padding: 1rem 1.5rem;
+                font-size: 1rem;
+            }
+
+            .score-circle {
+                width: 100px;
+                height: 100px;
+            }
+
+            .score-number {
+                font-size: 1.3rem;
+            }
+
+            .score-percentage {
+                font-size: 1rem;
+            }
+
+            .answer-review {
+                padding: 0.8rem;
+            }
+
+            .answer-info {
+                gap: 0.5rem;
+            }
+
+            .user-answer, .correct-answer, .explanation {
+                gap: 0.5rem;
+            }
+        }
+
+        /* Melhorias de Touch para Dispositivos Móveis */
+        @media (hover: none) and (pointer: coarse) {
+            .nav-btn,
+            .start-quiz-btn,
+            .quiz-btn,
+            .quiz-option {
+                min-height: 44px;
+                touch-action: manipulation;
+            }
+
+            .quiz-option {
+                transition: transform 0.2s ease;
+            }
+
+            .quiz-option:active {
+                transform: scale(0.98);
+            }
+
+            /* Remove hover effects em dispositivos touch */
+            .nav-btn:hover,
+            .start-quiz-btn:hover,
+            .quiz-btn:hover,
+            .quiz-option:hover {
+                transform: none;
+                background: inherit;
+                border-color: inherit;
+                box-shadow: inherit;
+            }
+        }
+
+        /* Otimizações de Performance */
+        * {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Acessibilidade */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Scroll suave */
+        @media (prefers-reduced-motion: no-preference) {
+            html {
+                scroll-behavior: smooth;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Fixo -->
+    <div class="quiz-header">
+        <div class="quiz-header-content">
+            <div class="header-top">
+                <div class="header-title">
+                    <h1><i class="fas fa-tint"></i> Quiz ODS6</h1>
+                    <p>Teste seus conhecimentos sobre Água Potável e Saneamento</p>
+                </div>
+                <div class="header-nav">
+                    <a href="index.html" target="_parent" class="nav-btn">
+                        <i class="fas fa-home"></i>
+                        Voltar ao Menu Inicial
+                    </a>
+                    <a href="admin.html" target="_blank" class="nav-btn admin">
+                        <i class="fas fa-user-shield"></i>
+                        Admin
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Conteúdo Principal -->
+    <div class="main-container">
+        <div class="content-wrapper">
+            <!-- Tela de Introdução -->
+            <div class="quiz-intro" id="quiz-intro">
+                <h2>Bem-vindo ao Quiz!</h2>
+                <p>Este quiz contém 10 perguntas sobre água potável, saneamento e os processos de tratamento de água. Cada pergunta tem 4 opções e você receberá feedback imediato sobre suas respostas.</p>
+                
+                <div class="quiz-features">
+                    <div class="quiz-feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Feedback Imediato</span>
+                    </div>
+                    <div class="quiz-feature">
+                        <i class="fas fa-trophy"></i>
+                        <span>Pontuação Final</span>
+                    </div>
+                    <div class="quiz-feature">
+                        <i class="fas fa-book"></i>
+                        <span>Explicações Detalhadas</span>
+                    </div>
+                    <div class="quiz-feature">
+                        <i class="fas fa-redo"></i>
+                        <span>Refazer Quantas Vezes Quiser</span>
+                    </div>
+                </div>
+
+                <button class="start-quiz-btn" onclick="startQuiz()">
+                    <i class="fas fa-play"></i>
+                    Iniciar Quiz
+                </button>
+            </div>
+
+            <!-- Container do Quiz -->
+            <div class="quiz-container" id="quiz-container" style="display: none;">
+                <!-- Progress Bar -->
+                <div class="quiz-progress">
+                    <div class="progress-top">
+                        <div class="progress-info">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progress-fill"></div>
+                            </div>
+                            <span class="quiz-counter" id="quiz-counter">1/10</span>
+                        </div>
+                        <div class="score-display">
+                            <i class="fas fa-star"></i>
+                            <span id="current-score">0 pontos</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question -->
+                <div class="quiz-question" id="quiz-question">
+                    <div class="question-number" id="question-number">Pergunta 1</div>
+                    <div class="question-text" id="question-text"></div>
+                </div>
+
+                <!-- Options -->
+                <div class="quiz-options" id="quiz-options"></div>
+
+                <!-- Explanation -->
+                <div class="quiz-explanation" id="quiz-explanation">
+                    <div class="explanation-header">
+                        <i class="fas fa-info-circle"></i>
+                        <span>Explicação</span>
+                    </div>
+                    <div class="explanation-text" id="explanation-text"></div>
+                </div>
+
+                <!-- Controls -->
+                <div class="quiz-controls">
+                    <button class="quiz-btn" id="next-btn" onclick="nextQuestion()" disabled>
+                        <span id="next-btn-text">Próxima Pergunta</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Result -->
+            <div class="quiz-result" id="quiz-result" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script>
+        // Quiz Data - Perguntas sobre água potável e saneamento
+        const quizData = [
+            {
+                question: "Qual é o principal objetivo da ODS 6?",
+                options: [
+                    "Garantir disponibilidade e manejo sustentável da água e saneamento para todos",
+                    "Reduzir a poluição do ar nas cidades",
+                    "Promover energia limpa e acessível",
+                    "Combater as mudanças climáticas"
+                ],
+                correct: 0,
+                explanation: "A ODS 6 tem como objetivo garantir a disponibilidade e o manejo sustentável da água e saneamento para todos até 2030."
+            },
+            {
+                question: "Quais são os principais contaminantes encontrados em água de poços artesianos?",
+                options: [
+                    "Apenas bactérias",
+                    "Coliformes fecais, metais pesados, pH inadequado e alta turbidez",
+                    "Somente metais pesados",
+                    "Apenas problemas de pH"
+                ],
+                correct: 1,
+                explanation: "A água de poços pode conter diversos contaminantes: coliformes fecais, metais pesados, pH inadequado e alta turbidez, todos prejudiciais à saúde."
+            },
+            {
+                question: "Qual material filtrante é mais eficaz para remover metais pesados da água?",
+                options: [
+                    "Areia comum",
+                    "Carvão ativado",
+                    "Zeólita",
+                    "Terra de automassa"
+                ],
+                correct: 2,
+                explanation: "A zeólita é um mineral natural com propriedades excepcionais de adsorção, sendo muito eficaz na remoção de metais pesados e amônia da água."
+            },
+            {
+                question: "Qual EPI é essencial para proteger os olhos durante análises de água?",
+                options: [
+                    "Máscara PFF2",
+                    "Óculos de proteção",
+                    "Luvas de borracha",
+                    "Touca descartável"
+                ],
+                correct: 1,
+                explanation: "Os óculos de proteção são essenciais para evitar respingos de água contaminada ou reagentes químicos nos olhos durante as análises."
+            },
+            {
+                question: "Qual é o tempo máximo recomendado para transporte de amostras de água?",
+                options: [
+                    "2 horas",
+                    "4 horas",
+                    "6 horas",
+                    "8 horas"
+                ],
+                correct: 2,
+                explanation: "O transporte de amostras deve ser feito em até 6 horas, mantendo-as refrigeradas para preservar suas características originais."
+            },
+            {
+                question: "Qual é a função principal do carvão ativado no filtro?",
+                options: [
+                    "Filtrar sedimentos grandes",
+                    "Remover metais pesados",
+                    "Reter impurezas orgânicas e melhorar sabor",
+                    "Ajustar o pH da água"
+                ],
+                correct: 2,
+                explanation: "O carvão ativado tem alta capacidade de adsorção, sendo eficaz na remoção de impurezas orgânicas, cloro e melhoria do sabor da água."
+            },
+            {
+                question: "Por que é importante usar EPIs durante todo o processo?",
+                options: [
+                    "Apenas para seguir regulamentos",
+                    "Para proteger contra contaminação biológica e química",
+                    "Somente para impressionar os clientes",
+                    "Não é necessário usar EPIs"
+                ],
+                correct: 1,
+                explanation: "Os EPIs são fundamentais para proteger o técnico contra contaminação por agentes biológicos, químicos e físicos presentes na água e materiais."
+            },
+            {
+                question: "Qual é o pH ideal para água potável?",
+                options: [
+                    "5,0 a 6,0",
+                    "6,0 a 9,5",
+                    "10,0 a 12,0",
+                    "3,0 a 5,0"
+                ],
+                correct: 1,
+                explanation: "Segundo a ANVISA, o pH da água potável deve estar entre 6,0 e 9,5 para ser considerada adequada para consumo humano."
+            },
+            {
+                question: "Qual material é usado como barreira natural final no filtro?",
+                options: [
+                    "Areia comum",
+                    "Carvão ativado",
+                    "Zeólita",
+                    "Terra de automassa"
+                ],
+                correct: 3,
+                explanation: "A terra de automassa atua como barreira natural final, proporcionando uma filtração adicional e polimento da água."
+            },
+            {
+                question: "Qual é o principal benefício social do projeto de filtração?",
+                options: [
+                    "Reduzir custos de energia",
+                    "Garantir água segura para famílias rurais",
+                    "Aumentar a produção agrícola",
+                    "Melhorar o transporte público"
+                ],
+                correct: 1,
+                explanation: "O principal benefício é garantir acesso à água potável segura para famílias rurais, promovendo saúde, dignidade e qualidade de vida."
+            }
+        ];
+
+        // Variáveis globais do quiz
+        let currentQuestion = 0;
+        let score = 0;
+        let userAnswers = [];
+        let isQuizActive = false;
+        let selectedOption = null;
+
+        // Função para iniciar o quiz
+        function startQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            userAnswers = [];
+            isQuizActive = true;
+            selectedOption = null;
+
+            document.getElementById('quiz-intro').style.display = 'none';
+            document.getElementById('quiz-container').style.display = 'block';
+            document.getElementById('quiz-result').style.display = 'none';
+
+            displayQuestion();
+        }
+
+        // Função para exibir pergunta
+        function displayQuestion() {
+            const question = quizData[currentQuestion];
+            
+            // Atualizar elementos da pergunta
+            document.getElementById('question-number').textContent = `Pergunta ${currentQuestion + 1}`;
+            document.getElementById('question-text').textContent = question.question;
+            
+            // Atualizar progresso
+            const progress = ((currentQuestion + 1) / quizData.length) * 100;
+            document.getElementById('progress-fill').style.width = `${progress}%`;
+            document.getElementById('quiz-counter').textContent = `${currentQuestion + 1}/${quizData.length}`;
+            // Pontuação removida - será surpresa no final!
+            
+            // Criar opções
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'quiz-option';
+                optionDiv.onclick = () => selectOption(index);
+                
+                optionDiv.innerHTML = `
+                    <div class="option-letter">${String.fromCharCode(65 + index)}</div>
+                    <div class="option-text">${option}</div>
+                    <div class="option-feedback">
+                        <i class="fas fa-check"></i>
+                        <i class="fas fa-times"></i>
+                    </div>
+                `;
+                
+                optionsContainer.appendChild(optionDiv);
+            });
+            
+            // Resetar estado
+            selectedOption = null;
+            document.getElementById('next-btn').disabled = true;
+            document.getElementById('quiz-explanation').classList.remove('show');
+            
+            // Atualizar texto do botão
+            const nextBtn = document.getElementById('next-btn-text');
+            nextBtn.textContent = currentQuestion === quizData.length - 1 ? 'Ver Resultado' : 'Próxima Pergunta';
+        }
+
+        // Função para selecionar opção
+        function selectOption(index) {
+            if (selectedOption !== null) return; // Já respondeu
+            
+            selectedOption = index;
+            const question = quizData[currentQuestion];
+            const options = document.querySelectorAll('.quiz-option');
+            
+            // Desabilitar todas as opções
+            options.forEach(option => option.classList.add('disabled'));
+            
+            // Marcar resposta selecionada
+            options[index].classList.add('selected');
+            
+            // Mostrar feedback visual
+            setTimeout(() => {
+                options.forEach((option, i) => {
+                    if (i === question.correct) {
+                        option.classList.add('correct');
+                    } else if (i === index && i !== question.correct) {
+                        option.classList.add('incorrect');
+                    }
+                });
+                
+                // Mostrar explicação
+                document.getElementById('explanation-text').textContent = question.explanation;
+                document.getElementById('quiz-explanation').classList.add('show');
+                
+                // Habilitar botão próximo
+                document.getElementById('next-btn').disabled = false;
+                
+                // Atualizar pontuação se correto (sem mostrar)
+                if (index === question.correct) {
+                    score++;
+                    // Pontuação mantida em segredo para surpresa no final!
+                }
+                
+            }, 500);
+        }
+
+        // Função para próxima pergunta
+        function nextQuestion() {
+            userAnswers.push(selectedOption);
+            
+            currentQuestion++;
+            
+            if (currentQuestion < quizData.length) {
+                // Scroll suave para o topo antes de mostrar próxima pergunta
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+                
+                // Pequeno delay para o scroll completar antes de mostrar nova pergunta
+                setTimeout(() => {
+                    displayQuestion();
+                }, 300);
+            } else {
+                showResult();
+            }
+        }
+
+        // Função para mostrar resultado
+        function showResult() {
+            document.getElementById('quiz-container').style.display = 'none';
+            
+            const resultContainer = document.getElementById('quiz-result');
+            resultContainer.style.display = 'block';
+            
+            const percentage = Math.round((score / quizData.length) * 100);
+            let resultClass = 'result-low';
+            let resultMessage = 'Continue estudando! A prática leva à perfeição.';
+            let resultIcon = 'fa-book';
+            
+            if (percentage >= 80) {
+                resultClass = 'result-high';
+                resultMessage = 'Excelente conhecimento! Você domina o assunto.';
+                resultIcon = 'fa-trophy';
+            } else if (percentage >= 60) {
+                resultClass = 'result-medium';
+                resultMessage = 'Bom conhecimento! Você está no caminho certo.';
+                resultIcon = 'fa-medal';
+            }
+
+            let resultHTML = `
+                <div class="result-header">
+                    <i class="fas ${resultIcon}"></i>
+                    <h3>Quiz Finalizado!</h3>
+                </div>
+                <div class="result-score">
+                    <div class="score-circle">
+                        <div class="score-number">${score}/${quizData.length}</div>
+                        <div class="score-percentage">${percentage}%</div>
+                    </div>
+                    <p class="result-message">${resultMessage}</p>
+                </div>
+                <div class="result-details">
+                    <h4>Revisão das Respostas</h4>
+            `;
+
+            quizData.forEach((question, index) => {
+                const userAnswer = userAnswers[index];
+                const isCorrect = userAnswer === question.correct;
+                
+                resultHTML += `
+                    <div class="answer-review ${isCorrect ? 'correct' : 'incorrect'}">
+                        <div class="question-review">
+                            <strong>Pergunta ${index + 1}:</strong> ${question.question}
+                        </div>
+                        <div class="answer-info">
+                            <div class="user-answer">
+                                <i class="fas ${isCorrect ? 'fa-check' : 'fa-times'}"></i>
+                                <span><strong>Sua resposta:</strong> ${question.options[userAnswer]}</span>
+                            </div>
+                            ${!isCorrect ? `<div class="correct-answer">
+                                <i class="fas fa-lightbulb"></i>
+                                <span><strong>Resposta correta:</strong> ${question.options[question.correct]}</span>
+                            </div>` : ''}
+                            <div class="explanation">
+                                <i class="fas fa-info-circle"></i>
+                                <span><strong>Explicação:</strong> ${question.explanation}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            resultHTML += `
+                </div>
+                <div class="result-actions">
+                    <button class="quiz-btn" onclick="restartQuiz()">
+                        <i class="fas fa-redo"></i>
+                        Refazer Quiz
+                    </button>
+                    <button class="quiz-btn quiz-btn-secondary" onclick="goToHome()">
+                        <i class="fas fa-home"></i>
+                        Voltar ao Site
+                    </button>
+                </div>
+            `;
+
+            resultContainer.innerHTML = resultHTML;
+            
+            // Salvar resultado (será implementado na fase 3)
+            saveQuizResult(score, percentage);
+            
+            // Scroll para o topo para mostrar o resultado
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Função para reiniciar quiz
+        function restartQuiz() {
+            document.getElementById('quiz-result').style.display = 'none';
+            document.getElementById('quiz-intro').style.display = 'block';
+            
+            currentQuestion = 0;
+            score = 0;
+            userAnswers = [];
+            isQuizActive = false;
+            selectedOption = null;
+            
+            // Scroll para o topo
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Função para voltar ao site principal
+        function goToHome() {
+            window.location.href = 'index.html';
+        }
+
+        // Função para salvar resultado (conectado ao backend)
+        async function saveQuizResult(score, percentage) {
+            const result = {
+                score: score,
+                total_questions: quizData.length,
+                percentage: percentage,
+                answers: userAnswers,
+                timestamp: new Date().toISOString()
+            };
+            
+            try {
+                const response = await fetch('/api/quiz/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(result)
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Resultado salvo com sucesso:', data);
+                } else {
+                    console.error('Erro ao salvar resultado');
+                }
+            } catch (error) {
+                console.error('Erro de conexão:', error);
+                // Fallback para localStorage se o backend não estiver disponível
+                let results = JSON.parse(localStorage.getItem('quizResults') || '[]');
+                results.push(result);
+                localStorage.setItem('quizResults', JSON.stringify(results));
+            }
+        }
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            // Quiz já está pronto para uso
+            console.log('Quiz carregado com sucesso!');
+        });
+    </script>
+</body>
+</html>
+
+
+
